@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjj.dao.UserTokenDao">
+	
+	<insert id="addUserToken" parameterType="com.wjj.entity.UserToken">
+		insert into users_token(id,token,create_time,level) 
+			values(#{id}, #{token},#{create_time},#{level})
+	</insert>
+	
+	<delete id="deleteUserToken" parameterType="int">
+		delete from users_token where id=#{id}
+	</delete>
+	
+	<update id="updateUserToken" parameterType="com.wjj.entity.UserToken">
+		update users_token set token=#{token},create_time=#{create_time},level=#{level}
+		   where id=#{id}
+	</update>
+ 
+	<select id="getUserTokenById" parameterType="int" resultType="com.wjj.entity.UserToken">
+		select * from users_token where id = #{id}
+	</select>
+	
+	<select id="getUserTokenByName" parameterType="String" resultType="com.wjj.entity.UserToken">
+		select * from users_token where token = #{token}
+	</select>
+</mapper>

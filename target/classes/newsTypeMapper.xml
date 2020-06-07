@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjj.dao.NewsTypeDao">
+	
+	<insert id="addNewsType" parameterType="com.wjj.entity.NewsType">
+		insert into news_type(id,type) values(#{id}, #{type})
+	</insert>
+	
+	<delete id="deleteNewsType" parameterType="int">
+		delete from news_type where id=#{id}
+	</delete>
+	
+	<update id="updateNewsType" parameterType="com.wjj.entity.NewsType">
+		update news_type set type=#{type} where id=#{id}
+	</update>
+ 
+	<select id="getNewsTypeById" parameterType="int" resultType="com.wjj.entity.NewsType">
+		select * from news_type where id = #{id}
+	</select>
+	
+	<select id="getNewsTypeByName" parameterType="String" resultType="com.wjj.entity.NewsType">
+		select * from news_type where type = #{type}
+	</select>
+	
+	<select id="getAllNewsType" resultType="com.wjj.entity.NewsType">
+		select * from news_type
+	</select>
+	
+</mapper>

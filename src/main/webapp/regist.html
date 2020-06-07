@@ -1,0 +1,30 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+	<meta name="Content-type" content="text/html; charset=UTF-8"><!--  无效：Chrome会乱码-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- 有效-->
+   <!--  <meta name="X-UA-Compatible" content="IE=9;IE=8;IE=7;IE=EDGE">-->
+   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>Login</title>  
+    <link rel="stylesheet" type="text/css" href="Login.css"/>  
+</head>  
+<body>  
+    <div id="login">  
+        <h1>新闻推荐系统</h1>  
+        <form action="userRegist" method="get">  
+        	<div style="text-align:center;">
+				<input type="radio" name="level" value="1">管理员
+				<input type="radio" name="level" value="2">普通用户
+			</div>
+			
+            <input class="info" type="text" required="required" placeholder="用户名" name="username"></input>  
+            <input class="info" type="password" required="required" placeholder="密码" name="password"></input>  
+            <button class="but" type="submit" style="text-align">注册</button>
+           <div style="text-align:center;"> 
+		   	<a id="btnForgetPwd" href="forgetpwd" target="_blank" style="" class="but2">忘记密码</a>
+            <a  class="but2" href="index.html" target="_blank" style="margin-left:10px;">立即登录</a></div>
+            </div>
+        </form>  
+    </div>  
+</body>  
+</html>  

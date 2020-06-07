@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>newsEdit2</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="resources/css/jquery-ui-themes.css" type="text/css" rel="stylesheet"/>
+    <link href="resources/css/axure_rp_page.css" type="text/css" rel="stylesheet"/>
+    <link href="data/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="files/newsedit2/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="resources/scripts/jquery-1.7.1.min.js"></script>
+    <script src="resources/scripts/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="resources/scripts/axure/axQuery.js"></script>
+    <script src="resources/scripts/axure/globals.js"></script>
+    <script src="resources/scripts/axutils.js"></script>
+    <script src="resources/scripts/axure/annotation.js"></script>
+    <script src="resources/scripts/axure/axQuery.std.js"></script>
+    <script src="resources/scripts/axure/doc.js"></script>
+    <script src="data/document.js"></script>
+    <script src="resources/scripts/messagecenter.js"></script>
+    <script src="resources/scripts/axure/events.js"></script>
+    <script src="resources/scripts/axure/action.js"></script>
+    <script src="resources/scripts/axure/expr.js"></script>
+    <script src="resources/scripts/axure/geometry.js"></script>
+    <script src="resources/scripts/axure/flyout.js"></script>
+    <script src="resources/scripts/axure/ie.js"></script>
+    <script src="resources/scripts/axure/model.js"></script>
+    <script src="resources/scripts/axure/repeater.js"></script>
+    <script src="resources/scripts/axure/sto.js"></script>
+    <script src="resources/scripts/axure/utils.temp.js"></script>
+    <script src="resources/scripts/axure/variables.js"></script>
+    <script src="resources/scripts/axure/drag.js"></script>
+    <script src="resources/scripts/axure/move.js"></script>
+    <script src="resources/scripts/axure/visibility.js"></script>
+    <script src="resources/scripts/axure/style.js"></script>
+    <script src="resources/scripts/axure/adaptive.js"></script>
+    <script src="resources/scripts/axure/tree.js"></script>
+    <script src="resources/scripts/axure/init.temp.js"></script>
+    <script src="files/newsedit2/data.js"></script>
+    <script src="resources/scripts/axure/legacy.js"></script>
+    <script src="resources/scripts/axure/viewer.js"></script>
+    <script type="text/javascript">
+      $axure.utils.getTransparentGifPath = function() { return 'resources/images/transparent.gif'; };
+      $axure.utils.getOtherPath = function() { return 'resources/Other.html'; };
+      $axure.utils.getReloadPath = function() { return 'resources/reload.html'; };
+    </script>
+	 <script src="jsonp.js"></script>
+    <script src="core.js"></script>
+    <script>
+    
+$(function() {
+	loadNewTypeList();
+	$("#u29_input").change(function(){
+		var chooseEle=$(this).find("option:selected");
+		var id=chooseEle.attr("value");
+		console.log("id="+chooseEle.text());	console.log("type="+chooseEle.attr("value"));
+	
+	});
+});
+function loadNewTypeList(){
+	console.log("load------------");
+	var url="./newsTypeGetList";//update api 
+	var token=GetParameter("t");
+	if(token){
+		sessionStorage.setItem("token", token);
+	}else{
+		token=sessionStorage.getItem("token");	
+	}
+
+	var username=sessionStorage.getItem("username");
+	console.log("username"+username);
+	$("#u9").children().remove();
+	$("#u9").append("<p><span>您好, </span><span style='color:blue'>"+username+"</span></p>");
+	var params={//
+			token:token,
+			type:encodeURI("历史新闻")
+	};
+	
+	console.log(params);
+	connectAPI(url,params,"callbak",function(bool,msg){
+		console.log(msg);
+		console.log(msg.retcode);
+		console.log(msg.newsTypeList);
+		if(msg.retcode!=200){
+			alert("加载新闻类型列表失败："+msg.retcode);
+			return;
+		}
+		var elemP=$("#u29_input");
+		var list=msg.newsTypeList;
+		var len=list.length;
+		
+		var childs="";
+//		childs+="<option name='aa'>default</option>";
+		if(list instanceof Array){
+			for(var i=0;i<len;i++){
+				var ele=list[i];
+				childs+="<option value='"+ele.type+"'>"+ele.type+"</option>";
+			}
+		}
+		elemP.children().remove();
+		elemP.append(childs);
+		elemP.change();
+	});
+	console.log("test");
+	
+}
+function u25click(){
+	
+	var result=$("#u32_input").val();
+	console.log(result);
+	var url="./newsTypeAdd";//update api 
+	var token=GetParameter("t");
+	if(token){
+		sessionStorage.setItem("token", token);
+	}else{
+		token=sessionStorage.getItem("token");	
+	}
+	var params={//
+			token:token,
+			type:encodeURI(result)
+	};
+	
+	console.log(params);
+	connectAPI(url,params,"callbak",function(bool,msg){
+		if(msg.retcode==200){
+			console.log("success");
+			return;
+		}
+	});
+}
+
+
+	
+    </script>
+  </head>
+  <body>
+    <div id="base" class="">
+
+      <!-- Unnamed (Shape) -->
+      <div id="u0" class="ax_paragraph">
+        <!-- Unnamed () -->
+        <div id="u1" class="text">
+          <p><span>新闻推荐系统</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u2" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u3" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u4" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u5" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Image) -->
+      <div id="u6" class="ax_image">
+        <img id="u6_img" class="img " src="images/newslist/u8.jpg"/>
+        <!-- Unnamed () -->
+        <div id="u7" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u8" class="ax_paragraph">
+        <!-- Unnamed () -->
+        <div id="u9" class="text">
+          <p><span>你好，wjj</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u10" class="ax_paragraph">
+        <img id="u10_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u11" class="text">
+          <p><span><a href="./index.html">[退出]</a></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Horizontal Line) -->
+      <div id="u12" class="ax_horizontal_line" style='border:1px solid'>
+      </div>
+
+    <div id="u13" class="ax_menu">
+        <!-- Unnamed (Table) -->
+        <div id="u14" class="ax_table" style="position:relative">
+          <!-- Unnamed (Menu Item) -->
+          <div id="u17"  style="    top: 0px;position:relative;height: 25px;border:1px solid" onclick="display2.style.display=(display2.style.display =='none')?'':'none'" >
+            <!-- Unnamed () -->
+              	新闻管理
+          </div>
+		  	<div id="display2" style="display:none;position:relative">
+				<div><a href="./newsedit2.html">新闻类型录入</a></div>
+				<div><a href="./newsedit.html">新闻录入</a></div>
+				<div><a href="./newslist.html">新闻列表</a></div>
+				<div><a href="./newsrecommend.html">新闻推荐</a></div>
+			</div>
+
+          <div id="u19" style="    top: 0px;position:relative;height:25px;border:1px solid" onclick="display3.style.display=(display3.style.display =='none')?'':'none'">
+             	用户管理
+          </div>
+          
+          	<div id="display3" style="display:none;position:relative">
+				<div><a href="./userlist.html">用户信息列表</a></div>
+				<div><a href="./useredit.html">用户信息录入</a></div>
+			</div>
+
+          <div id="u20" style=" width: 125px;left: 0px;   top: 0px;position:relative;height: 25px;border:1px solid ">
+             	系统设置   
+          </div>
+        </div>
+      </div>
+          
+          
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u21" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u22" class="text">
+          <p><span>新闻</span><span>类型</span><span>录入</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u23" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u24" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (HTML Button) -->
+      <div id="u25" class="ax_html_button">
+        <button id="u25_input" type="submit" value="保存" onclick="u25click()">保存</button>
+      </div>
+
+      <!-- Unnamed (HTML Button) -->
+      <div id="u26" class="ax_html_button">
+        <input id="u26_input" type="submit" value="重置"/>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u27" class="ax_paragraph">
+        <img id="u27_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u28" class="text">
+          <p><span>已有</span><span>类型</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Droplist) -->
+      <div id="u29" class="ax_droplist">
+        <select id="u29_input">
+          <option value="经济新闻">经济新闻</option>
+          <option value="政治新闻">政治新闻</option>
+          <option value="法律新闻">法律新闻</option>
+          <option value="军事新闻">军事新闻</option>
+          <option value="科技新闻">科技新闻</option>
+          <option value="文教新闻">文教新闻</option>
+          <option value="体育版新闻">体育版新闻</option>
+          <option value="社会新闻">社会新闻</option>
+        </select>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u30" class="ax_paragraph">
+        <img id="u30_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u31" class="text">
+          <p><span>新增类型</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Text Field) -->
+      <div id="u32" class="ax_text_field">
+        <input id="u32_input" type="text" value=""/>
+      </div>
+    </div>
+  </body>
+</html>

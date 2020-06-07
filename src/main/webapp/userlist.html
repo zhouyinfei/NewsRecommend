@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>userList</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link href="resources/css/jquery-ui-themes.css" type="text/css" rel="stylesheet"/>
+    <link href="resources/css/axure_rp_page.css" type="text/css" rel="stylesheet"/>
+    <link href="data/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="files/userlist/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="resources/scripts/jquery-1.7.1.min.js"></script>
+    <script src="resources/scripts/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="resources/scripts/axure/axQuery.js"></script>
+    <script src="resources/scripts/axure/globals.js"></script>
+    <script src="resources/scripts/axutils.js"></script>
+    <script src="resources/scripts/axure/annotation.js"></script>
+    <script src="resources/scripts/axure/axQuery.std.js"></script>
+    <script src="resources/scripts/axure/doc.js"></script>
+    <script src="data/document.js"></script>
+    <script src="resources/scripts/messagecenter.js"></script>
+    <script src="resources/scripts/axure/events.js"></script>
+    <script src="resources/scripts/axure/action.js"></script>
+    <script src="resources/scripts/axure/expr.js"></script>
+    <script src="resources/scripts/axure/geometry.js"></script>
+    <script src="resources/scripts/axure/flyout.js"></script>
+    <script src="resources/scripts/axure/ie.js"></script>
+    <script src="resources/scripts/axure/model.js"></script>
+    <script src="resources/scripts/axure/repeater.js"></script>
+    <script src="resources/scripts/axure/sto.js"></script>
+    <script src="resources/scripts/axure/utils.temp.js"></script>
+    <script src="resources/scripts/axure/variables.js"></script>
+    <script src="resources/scripts/axure/drag.js"></script>
+    <script src="resources/scripts/axure/move.js"></script>
+    <script src="resources/scripts/axure/visibility.js"></script>
+    <script src="resources/scripts/axure/style.js"></script>
+    <script src="resources/scripts/axure/adaptive.js"></script>
+    <script src="resources/scripts/axure/tree.js"></script>
+    <script src="resources/scripts/axure/init.temp.js"></script>
+    <script src="files/userlist/data.js"></script>
+    <script src="resources/scripts/axure/legacy.js"></script>
+    <script src="resources/scripts/axure/viewer.js"></script>
+    <script type="text/javascript">
+      $axure.utils.getTransparentGifPath = function() { return 'resources/images/transparent.gif'; };
+      $axure.utils.getOtherPath = function() { return 'resources/Other.html'; };
+      $axure.utils.getReloadPath = function() { return 'resources/reload.html'; };
+    </script>
+    
+    <script src="jsonp.js"></script>
+    <script src="core.js"></script>
+
+    <script>
+    
+$(function() {
+	loadUserInfoList();
+	$("#u29_input").change(function(){
+		var chooseEle=$(this).find("option:selected");
+		var id=chooseEle.attr("value");
+		console.log("id="+chooseEle.text());	console.log("type="+chooseEle.attr("value"));
+	
+	});
+});
+function loadUserInfoList(){
+	console.log("load------------");
+	var url="./userGetInfoList";//update api 
+	var token=sessionStorage.getItem("token");	
+
+	var username=sessionStorage.getItem("username");
+	console.log("username"+username);
+	$("#u9").children().remove();
+	$("#u9").append("<p><span>您好, </span><span style='color:blue'>"+username+"</span></p>");
+	var params={//
+			token:token
+	};
+	
+	console.log(params);
+	connectAPI(url,params,"callbak",function(bool,msg){
+		console.log(msg);
+		if(msg.retcode!=200){
+			alert("加载用户信息列表失败："+msg.retcode);
+			return;
+		}
+		var elemP=$("#u29_input");
+		var list=msg.userList;
+		var len=list.length;
+		
+		var tbody=$("#list");
+		var str="";
+
+		if(list instanceof Array){
+			for(var i=0;i<len;i++){
+				var ele=list[i];
+				str+="<tr>";
+				str+="<td>"+ele.username+"</td>";
+				var phonenum;
+				if(ele.phonenum == null){
+					phonenum = "";
+				}else{
+					phonenum = ele.phonenum;
+				}
+				str+="<td>"+phonenum+"</td>";
+				var email;
+				if(ele.email == null){
+					email = "";
+				}else{
+					email = ele.email;
+				}
+				str+="<td>"+email+"</td>";
+				str+="<td>"+ele.level+"</td>";
+				var del = "./userDelete?token=" + token + "&username=" + ele.username;
+				var edit = "./useredit.html?token=" + token + "&username=" + ele.username;
+				str+="<td class='btnTDs'><a href=" + edit + ">编辑</a><a href=" + del + ">删除</a></td>";
+				str+="</tr>";
+			}
+		}
+		//
+		tbody.children().remove();
+		tbody.append(str);
+
+
+	});
+	console.log("test");
+	
+}
+function u30click(){
+	var search=$("#u27_input").val();
+	console.log(search);
+	var url="./userGetInfoByAdmin";//update api 
+	var token=sessionStorage.getItem("token");	
+	var params={//
+			token:token,
+			username:search
+	};
+	
+	console.log(params);
+	connectAPI(url,params,"callbak",function(bool,msg){
+		if(msg.retcode!=200){
+			alert("用户不存在失败："+msg.retcode);
+			return;
+		}
+	
+		var tbody=$("#list");
+		var str="";
+		var ele=msg;
+		str+="<tr>";
+		str+="<td>"+ele.username+"</td>";
+		var phonenum;
+		if(ele.phonenum == null){
+			phonenum = "";
+		}else{
+			phonenum = ele.phonenum;
+		}
+		str+="<td>"+phonenum+"</td>";
+		var email;
+		if(ele.email == null){
+			email = "";
+		}else{
+			email = ele.email;
+		}
+		str+="<td>"+email+"</td>";
+		str+="<td>"+2+"</td>";
+		var del = "./userDelete?token=" + token + "&username=" + ele.username;
+		var edit = "./useredit.html?token=" + token + "&username=" + ele.username;
+		str+="<td class='btnTDs'><a href=" + edit + ">编辑</a><a href=" + del + ">删除</a></td>";
+		str+="</tr>";
+	
+		tbody.children().remove();
+		tbody.append(str);
+		
+	});
+}
+	
+    </script>
+    
+        <script>
+$(function() {
+	var username=sessionStorage.getItem("username");
+	console.log("username"+username);
+	$("#u11").children().remove();
+	$("#u11").append("<p><span>您好, </span><span style='color:blue'>"+username+"</span></p>");
+});
+    </script>
+    
+  </head>
+  <body>
+    <div id="base" class="">
+
+      <!-- Unnamed (Shape) -->
+      <div id="u0" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u1" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u2" class="ax_paragraph">
+        <!-- Unnamed () -->
+        <div id="u3" class="text">
+          <p><span>新闻推荐系统</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u4" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u5" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u6" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u7" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Image) -->
+      <div id="u8" class="ax_image">
+        <img id="u8_img" class="img " src="images/newslist/u8.jpg"/>
+        <!-- Unnamed () -->
+        <div id="u9" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u10" class="ax_paragraph">
+        <img id="u10_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u11" class="text">
+          <p><span>你好，wjj</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u12" class="ax_paragraph">
+        <img id="u12_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u13" class="text">
+          <p><span><a href="./index.html">[退出]</a></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Horizontal Line) -->
+      <div id="u14" class="ax_horizontal_line" style='border:1px solid'>
+      </div>
+
+	<div id="u15" class="ax_menu">
+        <!-- Unnamed (Table) -->
+        <div id="u16" class="ax_table" style="position:relative">
+          <!-- Unnamed (Menu Item) -->
+          <div id="u17"  style="    top: 0px;position:relative;height: 25px;border:1px solid" onclick="display2.style.display=(display2.style.display =='none')?'':'none'" >
+            <!-- Unnamed () -->
+              	新闻管理
+          </div>
+		  	<div id="display2" style="display:none;position:relative">
+				<div><a href="./newsedit2.html">新闻类型录入</a></div>
+				<div><a href="./newsedit.html">新闻录入</a></div>
+				<div><a href="./newslist.html">新闻列表</a></div>
+				<div><a href="./newsrecommend.html">新闻推荐</a></div>
+			</div>
+
+          <div id="u19" style="    top: 0px;position:relative;height:25px;border:1px solid" onclick="display3.style.display=(display3.style.display =='none')?'':'none'">
+             	用户管理
+          </div>
+          
+          	<div id="display3" style="display:none;position:relative">
+				<div><a href="./userlist.html">用户信息列表</a></div>
+				<div><a href="./useredit.html">用户信息录入</a></div>
+			</div>
+
+          <div id="u20" style=" width: 125px;left: 0px;   top: 0px;position:relative;height: 25px;border:1px solid ">
+             	系统设置   
+          </div>
+        </div>
+      </div>
+          
+          
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u23" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u24" class="text">
+          <p><span>用户信息列表</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u25" class="ax_shape" style='border:1px solid'>
+        <!-- Unnamed () -->
+        <div id="u26" class="text">
+          <p><span></span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (Text Field) -->
+      <div id="u27" class="ax_text_field">
+        <input id="u27_input" type="text" value=""/>
+      </div>
+
+      <!-- Unnamed (Shape) -->
+      <div id="u28" class="ax_paragraph">
+        <img id="u28_img" class="img " src="resources/images/transparent.gif"/>
+        <!-- Unnamed () -->
+        <div id="u29" class="text">
+          <p><span>用户名</span></p>
+        </div>
+      </div>
+
+      <!-- Unnamed (HTML Button) -->
+      <div id="u30" class="ax_html_button">
+        <input id="u30_input" type="submit" value="查询" onclick="u30click()"/>
+      </div>
+
+      <!-- Unnamed (Table) -->
+     <table id="table"  cellspacing="0">
+		<thead><tr>
+			<th>用户名</th>
+			<th>手机号</th>
+			<th>邮箱</th>
+			<th>权限</th>
+			<th>操作</th>
+		</tr></thead>
+		<tbody id="list">	
+			<tr>
+				<td>用户名</th>
+				<td>手机号</th>
+				<td>邮箱</th>
+				<td>权限</th>
+				<td>操作</th>
+			</tr>
+
+			
+		</tbody>
+	
+	 
+	 </table>
+
+     
+    </div>
+  </body>
+</html>

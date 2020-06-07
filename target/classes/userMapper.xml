@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjj.dao.UserDao">
+	
+	<insert id="addUser" parameterType="com.wjj.entity.User">
+		insert into users(id,username,password,phonenum,email,level,history_news) 
+			values(#{id}, #{username},#{password},#{phonenum},#{email},#{level},#{history_news})
+	</insert>
+	
+	<delete id="deleteUser" parameterType="int">
+		delete from users where id=#{id}
+	</delete>
+	
+	<update id="updateUser" parameterType="com.wjj.entity.User">
+		update users set username=#{username},password=#{password},phonenum=#{phonenum}
+		  ,email=#{email},history_news=#{history_news},search_words=#{search_words} where id=#{id}
+	</update>
+ 
+	<select id="getUserById" parameterType="int" resultType="com.wjj.entity.User">
+		select * from users where id = #{id}
+	</select>
+	
+	<select id="getUserByName" parameterType="String" resultType="com.wjj.entity.User">
+		select * from users where username = #{username}
+	</select>
+	
+	<select id="getUserByLevel" parameterType="int" resultType="com.wjj.entity.User">
+		select * from users where level = #{level}
+	</select>
+	
+	<select id="getAllUsers" resultType="com.wjj.entity.User">
+		select * from users
+	</select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjj.dao.NewsDao">
+	
+	<insert id="addNews" parameterType="com.wjj.entity.News">
+		insert into news(id,title,type,label,keyword,content,src) 
+			values(#{id}, #{title},#{type},#{label},#{keyword},#{content},#{src})
+	</insert>
+	
+	<delete id="deleteNews" parameterType="int">
+		delete from news where id=#{id}
+	</delete>
+	
+	<update id="updateNews" parameterType="com.wjj.entity.News">
+		update news set title=#{title},type=#{type},label=#{label}
+		  ,keyword=#{keyword},content=#{content},src=#{src} where id=#{id}
+	</update>
+ 
+	<select id="getNewsById" parameterType="int" resultType="com.wjj.entity.News">
+		select * from news where id = #{id}
+	</select>
+	
+	<select id="getNewsByType" parameterType="String" resultType="com.wjj.entity.News">
+		select * from news where type = #{type}
+	</select>
+	
+	<select id="getNewsByLabel" parameterType="String" resultType="com.wjj.entity.News">
+		select * from news where label = #{label}
+	</select>
+	
+	<select id="getNewsByKeyword" parameterType="String" resultType="com.wjj.entity.News">
+		select * from news where keyword like #{keyword} limit 10
+	</select>
+	
+	<select id="getNewsByTitleKeyword" parameterType="String" resultType="com.wjj.entity.News">
+		select * from news where title like #{keyword} limit 10
+	</select>
+	
+</mapper>
